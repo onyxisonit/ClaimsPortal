@@ -1,0 +1,33 @@
+# === Global ignores ===
+.DS_Store
+Thumbs.db
+
+# === Node / Angular (frontend) ===
+claims-portal-frontend/node_modules/
+claims-portal-frontend/dist/
+claims-portal-frontend/.angular/
+claims-portal-frontend/.vscode/
+claims-portal-frontend/.package-lock.json
+
+# === Java / Spring Boot (backend) ===
+claims-portal-backend/target/
+claims-portal-backend/.classpath
+claims-portal-backend/.project
+claims-portal-backend/.settings/
+claims-portal-backend/*.iml
+
+# === Maven ===
+claims-portal-backend/.mvn/
+claims-portal-backend/mvnw
+claims-portal-backend/mvnw.cmd
+
+# === Logs ===
+*.log
+
+# === OS / IDE / Misc ===
+.idea/
+*.swp
+*.swo
+
+# === Docker ===
+*.pid

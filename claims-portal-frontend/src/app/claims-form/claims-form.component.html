@@ -1,0 +1,60 @@
+<div class="claim-form-container">
+  <form class="claim-form" (ngSubmit)="submitClaim()" #claimForm="ngForm">
+    <h1>Submit a Claim</h1>
+    <p class="form-description">Please fill out the following details to submit your insurance claim.</p>
+
+    <h3>Your Information</h3>
+
+    <div class="form-group">
+      <label for="policyNumber">Policy Number</label>
+      <input
+        type="text"
+        id="policyNumber"
+        name="policyNumber"
+        placeholder="ABC123456*"
+        [(ngModel)]="claim.policyNumber"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="claimantName">Claimant Name</label>
+      <input
+        type="text"
+        id="claimantName"
+        name="claimantName"
+        placeholder="Jo Do*"
+        [(ngModel)]="claim.claimantName"
+        required
+      />
+    </div>
+
+    <h3>Incident Details</h3>
+
+    <div class="form-group">
+      <label for="incidentDescription">Description</label>
+      <textarea
+        id="incidentDescription"
+        name="incidentDescription"
+        placeholder="The incident at hand...*"
+        [(ngModel)]="claim.incidentDescription"
+        required
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="claimAmount">Claim Amount ($)</label>
+      <input
+        type="number"
+        id="claimAmount"
+        name="claimAmount"
+        placeholder="1500*"
+        min="1"
+        [(ngModel)]="claim.claimAmount"
+        required
+      />
+    </div>
+
+    <button type="submit" [disabled]="claimForm.invalid">Submit Claim</button>
+  </form>
+</div>

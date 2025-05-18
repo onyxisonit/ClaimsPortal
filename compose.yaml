@@ -1,0 +1,39 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: claims_portal
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./claims-portal-backend
+    container_name: claims-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/claims_portal
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - mysql
+
+  frontend:
+    build: ./claims-portal-frontend
+    container_name: claims-frontend
+    ports:
+      - "4200:4200"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    environment:
+      NG_CLI_ANALYTICS: "false"
+
+volumes:
+  mysql_data:
