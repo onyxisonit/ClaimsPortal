@@ -1,0 +1,35 @@
+<div class="view-claim-container">
+  <div class="view-claim-card">
+    <h2>View Your Claim</h2>
+
+    <p class="form-description">
+      Enter your Claim ID to view your claim details.
+    </p>
+
+    
+    <form (ngSubmit)="fetchClaim()" #form="ngForm">
+      <label for="claimId">Claim ID</label>
+      <input
+        type="text"
+        [(ngModel)]="claimId"
+        name="claimId"
+        required
+        placeholder="CN-abc12345*"
+      />
+      <button type="submit" [disabled]="!form.valid">Submit</button>
+    </form>
+
+    <div *ngIf="claim" class="success-message">
+      <h3>Claim Details</h3>
+      <p><strong>Policy Number:</strong> {{ claim.policyNumber }}</p>
+      <p><strong>Claimant Name:</strong> {{ claim.claimantName }}</p>
+      <p><strong>Description:</strong> {{ claim.incidentDescription }}</p>
+      <p><strong>Claim Amount:</strong> ${{ claim.claimAmount }}</p>
+      <p><strong>Status:</strong> {{ claim.status }}</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  </div>
+</div>

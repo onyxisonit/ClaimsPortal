@@ -2,6 +2,17 @@ import { Component } from '@angular/core';
 import { ClaimsService } from '../claims.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Claims } from '../claims.model';
+
+function emptyClaim(): Claims {
+  return {
+    claimId: '',
+    policyNumber: '',
+    claimantName: '',
+    incidentDescription: '',
+    claimAmount: 0,
+  };
+}
 
 @Component({
   selector: 'app-claims-form',
@@ -11,26 +22,38 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './claims-form.component.css'
 })
 export class ClaimsFormComponent {
-  claim = {
-    policyNumber: '',
-    claimantName: '',
-    incidentDescription: '',
-    claimAmount: 0
-  };
+
+  claim : Claims = emptyClaim();
+  generatedClaimId = "";
+  submissionSuccess: boolean = false;
+  submissionError: string = '';
 
   constructor(private claimsService: ClaimsService) {}
 
+  
   submitClaim() {
-    this.claimsService.submitClaim(this.claim).subscribe(() => {
-      alert('Claim submitted successfully!');
-
-    // Reset the form
-    this.claim = {
-      policyNumber: '',
-      claimantName: '',
-      incidentDescription: '',
-      claimAmount: 0
-    };
+    if (
+      !this.claim.policyNumber ||
+      !this.claim.claimantName ||
+      !this.claim.incidentDescription ||
+      this.claim.claimAmount <= 0
+    ) {
+      this.submissionSuccess = false;
+      this.generatedClaimId = '';
+      return;
+    }
+    
+    this.claimsService.submitClaim(this.claim).subscribe({
+      next: (res: any) => {
+      this.generatedClaimId = res.claimId;
+      this.submissionSuccess = true;
+      this.submissionError = '';
+      this.claim = emptyClaim(); // Reset form
+    },
+      error: (err) => {
+        this.submissionSuccess = false;
+        this.submissionError = 'Failed to submit claim. Please try again.';
+      }
     });
   }
 }

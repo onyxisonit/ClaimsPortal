@@ -1,6 +1,5 @@
-
 /* Center the form full screen */
-.claim-form-container {
+.view-claim-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,8 +7,8 @@
   box-sizing: border-box;
 }
 
-/* Card-style form layout */
-.claim-form {
+/* Card-style layout */
+.view-claim-card {
   display: flex;
   flex-direction: column;
   padding: 2rem;
@@ -17,16 +16,15 @@
   width: 100%;
   max-width: 600px;
   gap: 1.5rem;
-  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); */
 }
 
 /* Headings */
-.claim-form h1 {
+.view-claim-card h2 {
   font-size: 2rem;
   margin-bottom: 0;
 }
 
-.claim-form h3 {
+.view-claim-card h3 {
   font-size: 1.3rem;
   margin-top: 1rem;
 }
@@ -36,16 +34,8 @@
   font-size: 0.95rem;
 }
 
-/* Label + input group */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 1rem;
-}
 
-/* Inputs */
-input, textarea {
+input {
   border: 1px solid #444;
   border-radius: 6px;
   padding: 10px;
@@ -55,18 +45,19 @@ input, textarea {
   box-sizing: border-box;
   transition: border 0.3s ease;
   background-color: #FCF8F4;
+  margin-top: 0.5rem;
 }
 
-input:focus, textarea:focus {
+input:focus {
   border-color: lightseagreen;
   background-color: #FCF8F4;
   outline: none;
 }
 
-
-/* Button styling */
 button {
   padding: 12px;
+  margin-top: 2.5rem;
+  
   font-size: 1rem;
   border: none;
   background-color: lightseagreen;
@@ -86,16 +77,14 @@ button:hover:not(:disabled) {
   background-color: teal;
 }
 
+
 .success-message {
-  color: green;
-  text-align: center;
-  width: 100%;
-  display: block;
-  
+  color: black;
+  text-align: right;
 }
+
+/* Error message */
 .error-message {
   color: red;
-  text-align: center;
-  width: 100%;
-  display: block;
+  text-align: right;
 }

@@ -1,14 +1,26 @@
 package com.onyxisonit.claims_portal.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.server.ResponseStatusException;
 
 import com.onyxisonit.claims_portal.model.Claims;
 import com.onyxisonit.claims_portal.model.Claims.Status;
 import com.onyxisonit.claims_portal.repository.ClaimsRepository;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/claims")
@@ -32,10 +44,16 @@ public class ClaimsController {
         claim.getIncidentDescription().length() >= 15;
     }
 
-
     @GetMapping
     public List<Claims> getAllClaims() {
         return claimsRepository.findAll();
+    }
+
+    @GetMapping("/{claimId}")
+    public ResponseEntity<Claims> getClaimByClaimId(@PathVariable String claimId) {
+        Optional<Claims> optionalClaim = claimsRepository.findByClaimId(claimId);
+        return optionalClaim.map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Claim not found"));
     }
 
     @PutMapping("/{id}/review")
@@ -53,29 +71,31 @@ public class ClaimsController {
         return claimsRepository.save(claim);
     }
 
-
     @PostMapping
-    public Claims submitClaim(@RequestBody Claims claim) {
+    public ResponseEntity<Claims> submitClaim(@RequestBody Claims claim) {
       // Basic server-side validation 
       //Frontend validation can be bypassed by:
-
         // Sending a direct API request via Postman or curl
-
         // A user with JavaScript disabled
-
         // A malicious user manipulating your frontend or payload
     if (claim.getPolicyNumber() == null || claim.getPolicyNumber().isEmpty()
         || claim.getClaimantName() == null || claim.getClaimantName().isEmpty()
         || claim.getClaimAmount() <= 0) {
-        
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing required fields or invalid claim amount");
     }
 
-    // else, successful submission
-    claim.setStatus(Status.SUBMITTED);
-    return claimsRepository.save(claim);
+    // Generate unique claimIds with CN prefix
+    if (claim.getClaimId() == null || claim.getClaimId().isEmpty()){
+        String claimId = "CN-" + UUID.randomUUID().toString().substring(0, 8);
+        claim.setClaimId(claimId);
+        
     }
 
+    // Save the claim
+    claim.setStatus(Status.SUBMITTED);
+    Claims saved = claimsRepository.save(claim);
+    return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
     
     
 }

@@ -1,6 +1,14 @@
 import { Routes } from '@angular/router';
-import { ClaimsFormComponent } from './claims-form/claims-form.component';
 
 export const routes: Routes = [
-  { path: '', component: ClaimsFormComponent }
+  {
+    path: '',
+    loadComponent: () =>
+      import('./claims-form/claims-form.component').then(mod => mod.ClaimsFormComponent),
+  },
+  {
+    path: 'view-claims',
+    loadComponent: () =>
+      import('./view-claims/view-claims.component').then(mod => mod.ViewClaimsComponent),
+  }
 ];

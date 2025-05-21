@@ -1,4 +1,5 @@
 package com.onyxisonit.claims_portal.model;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +13,9 @@ public class Claims{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
+    private String claimId;
 
     private String policyNumber;
     private String claimantName;
@@ -34,6 +38,12 @@ public class Claims{
     }
     public void setId(Long id) {
         this.id = id;
+    }
+    public String getClaimId() {
+        return claimId;
+    }
+    public void setClaimId(String claimId) {
+        this.claimId = claimId;
     }
 
     public String getPolicyNumber() {
