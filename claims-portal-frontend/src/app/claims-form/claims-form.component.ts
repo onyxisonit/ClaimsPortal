@@ -1,3 +1,20 @@
+/**
+ * ClaimsFormComponent provides a form interface for users to submit insurance claims.
+ * It uses two-way data binding via ngModel to bind form input fields to a `Claims` model.
+ * 
+ * Features:
+ * - Displays a form for entering policy number, claimant name, incident description, and claim amount.
+ * - Performs basic client-side validation before sending data to the backend.
+ * - Calls ClaimsService to POST the claim data to the server.
+ * - Displays the generated claim ID on success, or an error message on failure.
+ * - Resets the form after successful submission.
+ * 
+ * Dependencies:
+ * - CommonModule and FormsModule for template-driven forms.
+ * - ClaimsService for HTTP communication.
+ * - Claims model for type-safe form data.
+ */
+
 import { Component } from '@angular/core';
 import { ClaimsService } from '../claims.service';
 import { CommonModule } from '@angular/common';

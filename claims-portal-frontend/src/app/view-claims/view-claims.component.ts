@@ -1,3 +1,15 @@
+/**
+ * ViewClaimsComponent allows users to enter a claim ID and fetch the corresponding claim details.
+ * 
+ * Features:
+ * - Template-driven input field for entering claim ID
+ * - Fetches claim data from the backend via ClaimsService
+ * - Displays retrieved claim information or an error message if not found
+ * 
+ * Dependencies:
+ * - CommonModule and FormsModule for template-driven forms.
+ */
+
 import { Component } from '@angular/core';
 import { ClaimsService } from '../claims.service';
 import { Claims } from '../claims.model';

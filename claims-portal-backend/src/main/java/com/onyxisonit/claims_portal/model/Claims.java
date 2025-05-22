@@ -21,10 +21,10 @@ public class Claims{
     private String claimantName;
     private String incidentDescription;
     private double claimAmount;
+    private String denialReason;
 
     public enum Status {
         SUBMITTED,
-        FAILED,
         APPROVED,
         DENIED
     }
@@ -79,6 +79,13 @@ public class Claims{
     }
     public void setStatus(Status status){
         this.status = status;
+    }
+
+    public String getDenialReason() {
+        return denialReason;
+    }
+    public void setDenialReason(String denialReason) {
+        this.denialReason = denialReason;
     }
 
 }

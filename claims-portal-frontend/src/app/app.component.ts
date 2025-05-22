@@ -1,5 +1,10 @@
+
+/**
+ * Root component of the application.
+ * Uses Angular's standalone component setup and routing directives.
+ */
+
 import { Component } from '@angular/core';
-// import { ClaimsFormComponent } from './claims-form/claims-form.component';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -9,6 +14,4 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'claims_portal_frontend';
-}
+export class AppComponent {}

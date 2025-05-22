@@ -83,6 +83,11 @@ button:hover:not(:disabled) {
   text-align: right;
 }
 
+.denial-reason {
+  color: red;
+  text-align: right;
+}
+
 /* Error message */
 .error-message {
   color: red;

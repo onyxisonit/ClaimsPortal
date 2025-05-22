@@ -15,7 +15,13 @@
           placeholder="ABC123456*"
           [(ngModel)]="claim.policyNumber"
           required
+          pattern="^[A-Z]{3}[0-9]{4}$"
+          #policyNumberInput="ngModel"
         />
+         <div *ngIf="policyNumberInput.invalid && policyNumberInput.touched" class="error-message">
+          <p *ngIf="policyNumberInput.errors?.['required']">Policy number is required.</p>
+          <p *ngIf="policyNumberInput.errors?.['pattern']">Must be 3 uppercase letters followed by 4 digits (e.g. ABC1234).</p>
+        </div>
       </div>
 
       <div class="form-group">

@@ -15,7 +15,13 @@
         name="claimId"
         required
         placeholder="CN-abc12345*"
+        pattern="CN-[A-Za-z0-9]{8}"
+        #claimIdInput="ngModel"
       />
+      <div *ngIf="claimIdInput.invalid && claimIdInput.touched" class="error-message">
+        <p *ngIf="claimIdInput.errors?.['required']">Claim ID is required.</p>
+        <p *ngIf="claimIdInput.errors?.['pattern']">Claim ID must be in the format CN- followed by 8 alphanumeric characters.</p> 
+      </div>
       <button type="submit" [disabled]="!form.valid">Submit</button>
     </form>
 
@@ -26,6 +32,9 @@
       <p><strong>Description:</strong> {{ claim.incidentDescription }}</p>
       <p><strong>Claim Amount:</strong> ${{ claim.claimAmount }}</p>
       <p><strong>Status:</strong> {{ claim.status }}</p>
+      <div *ngIf="claim.status === 'DENIED'" class="denial-reason">
+        <p><strong>Reason for Denial:</strong> {{ claim.denialReason }}</p>
+      </div>
     </div>
 
     <div *ngIf="error" class="error-message">

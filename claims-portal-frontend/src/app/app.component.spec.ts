@@ -6,13 +6,14 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      // Provide a mock ActivatedRoute to simulate a route with parameter 'CN-test'
       providers: [
         {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
               paramMap: {
-                get: () => 'CN-test' 
+                get: () => 'CN-test' // Simulates a dynamic route parameter
               }
             }
           }
@@ -21,25 +22,20 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
+  // Test 1: ensures the component initializes correctly
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'claims_portal_frontend' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('claims_portal_frontend');
-  });
 
+  // Test 2: ensures the <router-outlet> is present in the DOM
   it('should include a router outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('router-outlet')).not.toBeNull();
   });
-
-  
 
 });

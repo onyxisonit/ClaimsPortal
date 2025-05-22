@@ -1,9 +1,10 @@
 package com.onyxisonit.claims_portal.controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.server.ResponseStatusException;
 
 import com.onyxisonit.claims_portal.model.Claims;
@@ -30,19 +29,35 @@ public class ClaimsController {
     @Autowired
     private ClaimsRepository claimsRepository;
 
-    private boolean isApproved(Claims claim) {
-    // Mock rules for approval:
-    return
-        // Must have a policy number
-        claim.getPolicyNumber() != null && !claim.getPolicyNumber().isEmpty() &&
-        
-        // Claim amount must be reasonable
-        claim.getClaimAmount() > 100 && claim.getClaimAmount() < 10000 &&
-        
-        // Must describe the incident in at least 15 characters
-        claim.getIncidentDescription() != null &&
-        claim.getIncidentDescription().length() >= 15;
+    private String isApproved(Claims claim) {
+    // Mock rules for approval and denial
+        if (claim.getClaimAmount() <= 100 || claim.getClaimAmount() > 100000) {
+            return "Claim amount must be between $100 and $10,000.";
+        }
+
+        if (claim.getIncidentDescription() == null || claim.getIncidentDescription().length() < 25) {
+            return "Incident description must be at least 15 characters.";
+        }
+
+        if (!claim.getIncidentDescription().matches(".*\\b(hit|damage|accident|incident|loss|fire|theft)\\b.*")) {
+            return "Incident description must reference a valid cause (e.g., hit, damage, accident, incident, loss).";
+        }
+
+        if (claim.getClaimantName().length() < 3 || !claim.getClaimantName().matches("^[A-Za-z ]+$")) {
+            return "Claimant name must be at least 3 characters and contain only letters and spaces.";
+        }
+
+        if (claim.getPolicyNumber().length() != 7 || !claim.getPolicyNumber().matches("^[A-Z]{3}[0-9]{4}$")) {
+            return "Policy number must be in format ABC1234.";
+        }
+
+        if (claim.getClaimAmount() > 5000 && claim.getIncidentDescription().length() < 50) {
+            return "High-value claims require more detailed incident descriptions.";
+        }
+
+        return null; // All conditions met — approved
     }
+
 
     @GetMapping
     public List<Claims> getAllClaims() {
@@ -61,11 +76,15 @@ public class ClaimsController {
         Claims claim = claimsRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // Mock approval logic
-        if (isApproved(claim)) {
+       
+        String denialReason = isApproved(claim);
+
+        if (denialReason == null) {
             claim.setStatus(Status.APPROVED);
+            claim.setDenialReason(null);
         } else {
             claim.setStatus(Status.DENIED);
+            claim.setDenialReason(denialReason);
         }
 
         return claimsRepository.save(claim);
@@ -74,10 +93,6 @@ public class ClaimsController {
     @PostMapping
     public ResponseEntity<Claims> submitClaim(@RequestBody Claims claim) {
       // Basic server-side validation 
-      //Frontend validation can be bypassed by:
-        // Sending a direct API request via Postman or curl
-        // A user with JavaScript disabled
-        // A malicious user manipulating your frontend or payload
     if (claim.getPolicyNumber() == null || claim.getPolicyNumber().isEmpty()
         || claim.getClaimantName() == null || claim.getClaimantName().isEmpty()
         || claim.getClaimAmount() <= 0) {

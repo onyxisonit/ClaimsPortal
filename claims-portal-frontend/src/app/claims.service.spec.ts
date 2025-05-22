@@ -1,3 +1,16 @@
+/**
+ * Unit tests for the ClaimsService.
+ * 
+ * This test suite verifies that:
+ * - The service is created successfully
+ * - POST requests correctly send new claims to the backend
+ * - GET requests fetch claims by claimId as expected
+ * - 404 errors are properly handled when a claim is not found
+ * 
+ * Angular's HttpClientTestingModule is used to mock HTTP calls and
+ * validate request methods, payloads, and responses without hitting a real server.
+ */
+
 import { TestBed } from '@angular/core/testing';
 
 import { ClaimsService } from './claims.service';
@@ -26,10 +39,12 @@ describe('ClaimsService', () => {
     httpMock.verify();
   });
 
+  // Test 1: ensures the ClaimsService is created
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // Test 2: ensures POST requests send new claims to the backend
   it('should POST a new claim to the backend', () => {
     const testClaim: Claims = {
       policyNumber: 'ABC123',
@@ -46,10 +61,11 @@ describe('ClaimsService', () => {
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(testClaim);
 
-    req.flush(testClaim);
+    req.flush(testClaim); // Simulate backend response
 
   });
 
+  // Test 3: ensures GET requests fetch claims by claimId
   it('should GET a claim by claimId from the backend', () => {
     const mockClaim: Claims = {
       policyNumber: 'XYZ789',
@@ -69,6 +85,8 @@ describe('ClaimsService', () => {
     req.flush(mockClaim);
   });
 
+
+  // Test 4: ensures 404 errors are properly handled
   it('should handle 404 error when claim not found', () => {
     const claimId = 'CN-doesnotexist';
 

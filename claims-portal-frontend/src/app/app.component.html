@@ -1,10 +1,26 @@
+<!-- Top-level header for navigation -->
 <header>
   <nav>
-    <a routerLink="/" routerLinkActive="active">Submit Claim</a>
-    <a routerLink="/view-claims" routerLinkActive="active">View Claims</a>
+    <!-- Link to the home (submit claims) page. -->
+    <a 
+      routerLink="/" 
+      routerLinkActive="active"  
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Submit Claim
+    </a>
+
+    <!-- Link to the view-claims page. -->
+    <a 
+      routerLink="/view-claims" 
+      routerLinkActive="active"
+    >
+      View Claims
+    </a>
   </nav>
 </header>
 
+<!-- Main content area where routed components will render -->
 <main>
   <router-outlet></router-outlet>
 </main>
